@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp
+package com.ibra.dev.android.storibankapp.core.host
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
