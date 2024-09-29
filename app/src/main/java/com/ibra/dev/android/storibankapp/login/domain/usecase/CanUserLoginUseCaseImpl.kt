@@ -10,7 +10,7 @@ class CanUserLoginUseCaseImpl(
     private val repository: LoginRepository
 ) : CanUserLoginUseCase {
 
-    override suspend fun login(email: String, password: String): LoginStates {
+    override suspend fun invoke(email: String, password: String): LoginStates {
         var result: LoginStates = LoginStates.Error("An error occurred")
         repository.getCredentials(email).catch { e ->
             result = LoginStates.Error(e.message.orEmpty())

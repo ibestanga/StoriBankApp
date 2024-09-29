@@ -22,7 +22,7 @@ class LoginViewModel @Inject constructor(
     fun login(email: String, password: String) {
         _loginScreenEventsStateFlow.value = LoginStates.Loading
         viewModelScope.launch {
-            _loginScreenEventsStateFlow.value = loginUseCase.login(email, password).also {
+            _loginScreenEventsStateFlow.value = loginUseCase.invoke(email, password).also {
                 Log.i(LoginViewModel::class.simpleName, "login: $it")
             }
         }

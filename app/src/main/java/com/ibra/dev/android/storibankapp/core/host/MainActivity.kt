@@ -1,7 +1,6 @@
 package com.ibra.dev.android.storibankapp.core.host
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,9 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.ibra.dev.android.storibankapp.login.data.datasource.LoginRemoteDataSourceImpl.Companion.CLIENTS_COLLECTION
-import com.ibra.dev.android.storibankapp.login.data.datasource.LoginRemoteDataSourceImpl.Companion.TAG
 import com.ibra.dev.android.storibankapp.login.presentation.viewmodel.LoginViewModel
 import com.ibra.dev.android.storibankapp.ui.theme.StoriBankAppTheme
 import dagger.hilt.android.AndroidEntryPoint
