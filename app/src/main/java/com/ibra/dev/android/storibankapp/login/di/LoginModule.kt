@@ -1,9 +1,7 @@
 package com.ibra.dev.android.storibankapp.login.di
 
-import com.google.firebase.firestore.FirebaseFirestore
+import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.login.data.contracts.LoginRepository
-import com.ibra.dev.android.storibankapp.login.data.contracts.LoginRemoteDataSource
-import com.ibra.dev.android.storibankapp.login.data.datasource.LoginRemoteDataSourceImpl
 import com.ibra.dev.android.storibankapp.login.data.repository.LoginRepositoryImpl
 import com.ibra.dev.android.storibankapp.login.domain.contracts.CanUserLoginUseCase
 import com.ibra.dev.android.storibankapp.login.domain.usecase.CanUserLoginUseCaseImpl
@@ -22,12 +20,7 @@ class LoginModule {
     }
 
     @Provides
-    fun provideLoginRepository(remoteDataSource: LoginRemoteDataSource): LoginRepository {
+    fun provideLoginRepository(remoteDataSource: UserRemoteDataSource): LoginRepository {
         return LoginRepositoryImpl(remoteDataSource)
-    }
-
-    @Provides
-    fun provideLoginRemoteDataSource(dataBase: FirebaseFirestore): LoginRemoteDataSource {
-        return LoginRemoteDataSourceImpl(dataBase)
     }
 }

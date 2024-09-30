@@ -15,12 +15,17 @@ class CanUserLoginUseCaseImpl(
         repository.getCredentials(email).catch { e ->
             result = LoginStates.Error(e.message.orEmpty())
             Log.e(CanUserLoginUseCaseImpl::class.java.simpleName, "login error --> ${e.message}", e)
-        }.collect {
-            result = if (it == password) {
-                LoginStates.Success
+        }.collect { response ->
+            result = if (response.isSuccess == true) {
+                if (response.data?.password == password) {
+                    LoginStates.Success
+                } else {
+                    LoginStates.Error("Invalid password")
+                }
             } else {
-                LoginStates.Error("Invalid credentials")
+                LoginStates.Error(response.message.orEmpty())
             }
+
         }
         return result
     }
