@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.R
+import com.ibra.dev.android.storibankapp.core.presentation.navigations.HomeDestination
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyFormTextField
@@ -62,6 +63,7 @@ fun LoginScreen(navController: NavController) {
             is LoginStates.Loading -> isLoading = true
             LoginStates.Success -> {
                 isLoading = false
+                navController.navigate(HomeDestination)
             }
 
             null -> Unit

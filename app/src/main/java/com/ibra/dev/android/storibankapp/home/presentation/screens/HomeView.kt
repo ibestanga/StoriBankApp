@@ -1,11 +1,9 @@
-package com.ibra.dev.android.storibankapp.register.presentations.screen
+package com.ibra.dev.android.storibankapp.home.presentation.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,23 +11,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavController) {
-
-    val registerViewModel: RegisterScreenViewModel = hiltViewModel()
+fun HomeView(navController: NavController) {
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Registro")
+                    Text(text = "Home")
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -40,12 +33,7 @@ fun RegisterScreen(navController: NavController) {
         }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            Button(modifier = Modifier.align(Alignment.Center),
-                onClick = {
-                    registerViewModel.registerUser()
-                }) {
-                Text(text = "Register User")
-            }
+
         }
     }
 }

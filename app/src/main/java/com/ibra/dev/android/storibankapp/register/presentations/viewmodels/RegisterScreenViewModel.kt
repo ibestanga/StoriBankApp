@@ -2,6 +2,7 @@ package com.ibra.dev.android.storibankapp.register.presentations.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ibra.dev.android.storibankapp.core.data.entities.MovementsEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.register.domain.contracts.CreateUserUseCase
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
@@ -30,9 +31,20 @@ class RegisterScreenViewModel @Inject constructor(
                     UserEntity(
                         name = "ibrahim ismael",
                         surname = "estanga",
-                        email = "ida.saxton.mckinley@example-pet-store.com",
+                        email = "test@test",
                         password = "123456789",
-                        dniPicture = "image base 64"
+                        dniPicture = "image base 64",
+                        balance = 500.50,
+                        movements = listOf(
+                            MovementsEntity(
+                                type = "deposit",
+                                amount = 500.50
+                            ),
+                            MovementsEntity(
+                                type = "withdraw",
+                                amount = 100.50
+                            )
+                        )
                     )
                 )
             }

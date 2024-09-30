@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ibra.dev.android.storibankapp.home.presentation.screens.HomeView
 import com.ibra.dev.android.storibankapp.login.presentation.screen.LoginScreen
 import com.ibra.dev.android.storibankapp.register.presentations.screen.RegisterScreen
 
@@ -15,9 +16,9 @@ fun AppNav() {
         navController = navController,
         startDestination = LoginDestination
     ) {
-//        composable<HomeDestination> {
-//            TODO("Not yet implemented")
-//        }
+        composable<HomeDestination> {
+            HomeView(navController)
+        }
 
         composable<LoginDestination> {
             LoginScreen(navController)
