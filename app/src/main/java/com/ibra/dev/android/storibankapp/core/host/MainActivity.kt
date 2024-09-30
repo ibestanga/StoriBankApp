@@ -47,7 +47,7 @@ fun Greeting(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            loginViewModel.login("ida.saxton.mckinley@example-pet-store.com", "123456")
+            loginViewModel.tryLogin("ida.saxton.mckinley@example-pet-store.com", "123456")
         }) {
             Text(text = "Login")
         }

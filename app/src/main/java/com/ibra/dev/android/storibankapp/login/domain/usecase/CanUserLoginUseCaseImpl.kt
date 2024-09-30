@@ -12,7 +12,7 @@ class CanUserLoginUseCaseImpl(
 
     override suspend fun invoke(email: String, password: String): LoginStates {
         var result: LoginStates = LoginStates.Error("An error occurred")
-        repository.getCredentials(email).catch { e ->
+        repository.getUserData(email).catch { e ->
             result = LoginStates.Error(e.message.orEmpty())
             Log.e(CanUserLoginUseCaseImpl::class.java.simpleName, "login error --> ${e.message}", e)
         }.collect { response ->

@@ -10,7 +10,7 @@ class LoginRepositoryImpl(
     private val remoteDataSource: UserRemoteDataSource
 ) : LoginRepository {
 
-    override suspend fun getCredentials(email: String): Flow<UserResponse> {
+    override suspend fun getUserData(email: String): Flow<UserResponse> {
         return remoteDataSource.getUser(email)
     }
 }

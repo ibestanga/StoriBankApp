@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
 
-    suspend fun getCredentials(email: String): Flow<UserResponse>
+    suspend fun getUserData(email: String): Flow<UserResponse>
 }
