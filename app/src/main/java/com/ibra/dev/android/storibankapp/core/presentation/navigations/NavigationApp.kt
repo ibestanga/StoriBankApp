@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ibra.dev.android.storibankapp.login.presentation.screen.LoginScreen
+import com.ibra.dev.android.storibankapp.register.presentations.screen.RegisterScreen
 
 @Composable
 fun AppNav() {
@@ -22,9 +23,9 @@ fun AppNav() {
             LoginScreen(navController)
         }
 
-//        composable<RegisterDestination> {
-//            TODO("Not yet implemented")
-//        }
+        composable<RegisterDestination> {
+            RegisterScreen(navController)
+        }
 //
 //        composable<TakePictureDniDestination> {
 //            TODO("Not yet implemented")

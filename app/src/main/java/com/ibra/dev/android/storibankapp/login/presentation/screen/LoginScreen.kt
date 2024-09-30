@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.R
+import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyFormTextField
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyPasswordTextField
@@ -84,7 +85,7 @@ fun LoginScreen(navController: NavController) {
             LoginFooter(
                 modifier = Modifier.align(Alignment.BottomCenter),
             ) {
-
+                navController.navigate(RegisterDestination)
             }
         }
     }
@@ -102,7 +103,6 @@ private fun LoginForm(
     var inputPassword by remember { mutableStateOf("") }
 
     var hasErrorInputEmail by remember { mutableStateOf(false) }
-
 
     Column(
         modifier = modifier
@@ -129,8 +129,8 @@ private fun LoginForm(
                 isPasswordVisible = !isPasswordVisible
             },
             isPasswordVisible = isPasswordVisible
-        ) {
-            inputPassword = it
+        ) { input ->
+            inputPassword = input
         }
 
         MyButton(
