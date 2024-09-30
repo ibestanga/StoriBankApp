@@ -4,11 +4,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
-
+import com.ibra.dev.android.storibankapp.core.utils.orAlternative
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-
 
 class UserRemoteDataSourceImpl(
     private val database: FirebaseFirestore
@@ -24,19 +23,20 @@ class UserRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun createUser(user: UserEntity): Flow<UserResponse> {
-        return flow {
-            var result = UserResponse()
-            user.email?.let { email ->
-                database.collection(CLIENTS_COLLECTION).document(email).set(user)
-                    .addOnFailureListener { exception ->
-                        result = result.copy(isSuccess = false, message = exception.message)
-                    }.addOnSuccessListener {
-                        result =
-                            result.copy(isSuccess = true, message = "User created successfully")
-                    }
-            } ?: throw IllegalArgumentException("User email is null")
-        }
+    override suspend fun createUser(user: UserEntity): Flow<UserResponse> = flow {
+        user.email?.let { email ->
+            try {
+                database.collection(CLIENTS_COLLECTION).document(email).set(user).await()
+                emit(UserResponse(isSuccess = true, message = "User created successfully"))
+            } catch (e: Exception) {
+                emit(
+                    UserResponse(
+                        isSuccess = false,
+                        message = e.message.orAlternative("Unknown error occurred")
+                    )
+                )
+            }
+        } ?: emit(UserResponse(isSuccess = false, message = "Email is required"))
     }
 
     override suspend fun updateUser(user: UserEntity): Flow<UserResponse> {
