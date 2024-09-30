@@ -6,6 +6,6 @@ data class UserEntity(
     val email: String? = null,
     val password: String? = null,
     val movements: List<MovementsEntity> = emptyList(),
-    val balance: Double? = null,
-    val idPicture: String? = null
+    val balance: Double = 0.0,
+    val dniPicture: String? = null
 )

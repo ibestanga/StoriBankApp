@@ -25,7 +25,6 @@ class CanUserLoginUseCaseImpl(
             } else {
                 LoginStates.Error(response.message.orEmpty())
             }
-
         }
         return result
     }
