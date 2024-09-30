@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     id("kotlin-kapt")
+    kotlin("plugin.serialization") version "1.8.20"
     id("com.google.dagger.hilt.android")
     id("com.google.firebase.crashlytics")
 }
@@ -63,6 +64,8 @@ dependencies {
     // foundations
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.kotlinx.serialization.json)
+
 
     // ui
     implementation(libs.androidx.activity.compose)
