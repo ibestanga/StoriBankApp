@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ibra.dev.android.storibankapp.core.navigations.AppNav
 import com.ibra.dev.android.storibankapp.login.presentation.viewmodel.LoginViewModel
 import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
 import com.ibra.dev.android.storibankapp.ui.theme.StoriBankAppTheme
@@ -28,9 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StoriBankAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(modifier = Modifier.padding(innerPadding))
-                }
+                AppNav()
             }
         }
     }

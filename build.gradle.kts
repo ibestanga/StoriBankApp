@@ -4,5 +4,12 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.di.hilt) apply false
+    kotlin("plugin.serialization") version "1.8.20" apply false
     id("com.google.firebase.crashlytics") version "3.0.2" apply false
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
+    }
 }
