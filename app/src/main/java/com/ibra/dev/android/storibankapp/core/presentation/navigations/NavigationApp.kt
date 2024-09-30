@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.core.navigations
+package com.ibra.dev.android.storibankapp.core.presentation.navigations
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
