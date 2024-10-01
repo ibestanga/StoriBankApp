@@ -1,14 +1,14 @@
 package com.ibra.dev.android.storibankapp.register.presentations.screen
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,10 +30,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.LoginDestination
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
-import com.ibra.dev.android.storibankapp.core.presentation.navigations.TakePictureDniDestination
+import com.ibra.dev.android.storibankapp.core.presentation.widgets.CameraModalBottomSheet
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
-import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyFormTextField
-import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyPasswordTextField
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.RequestCameraPermission
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
@@ -53,24 +51,19 @@ fun SingUpScreen(navController: NavController) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
+    var pictureBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = stateScreen) {
-        when (val state = stateScreen) {
-            is RegisterScreenStates.Loading -> isLoading = true
-            is RegisterScreenStates.Success -> {
-                navController.navigate(LoginDestination)
-                navController.popBackStack<RegisterDestination>(inclusive = true)
-            }
-
-            is RegisterScreenStates.Error -> {
-                isLoading = false
-                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
-            }
-
-            else -> Unit
+    HandlerScreenState(
+        stateScreen,
+        context,
+        onLoadingState = { isLoading = it },
+        onSuccessNavigate = {
+            navController.navigate(LoginDestination)
+            navController.popBackStack<RegisterDestination>(inclusive = true)
         }
-    }
+    )
 
     if (requestCameraPermission) {
         RequestCameraPermission { granted ->
@@ -85,7 +78,8 @@ fun SingUpScreen(navController: NavController) {
 
     if (showBottomSheet) {
         CameraModalBottomSheet(
-            onBitmapCaptured = {
+            onBitmapCaptured = { bitmap ->
+                pictureBitmap = bitmap
                 showBottomSheet = false
             }
         )
@@ -113,14 +107,15 @@ fun SingUpScreen(navController: NavController) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             } else {
-                RegisterForm(
+                SingUpForm(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.TopCenter),
                     viewModel = registerViewModel,
                     navCameraAction = {
                         requestCameraPermission = true
-                    }
+                    },
+                    pictureBitmap = pictureBitmap
                 )
                 MyButton(
                     modifier = Modifier
@@ -138,114 +133,24 @@ fun SingUpScreen(navController: NavController) {
 }
 
 @Composable
-private fun RegisterForm(
-    modifier: Modifier,
-    viewModel: RegisterScreenViewModel,
-    navCameraAction: () -> Unit
+private fun HandlerScreenState(
+    stateScreen: RegisterScreenStates,
+    context: Context,
+    onLoadingState: (Boolean) -> Unit,
+    onSuccessNavigate: () -> Unit,
 ) {
-    Column(modifier = modifier) {
-        NameInput(
-            modifier = Modifier
-                .padding(mediumPadding)
-                .fillMaxWidth(),
-            isValid = viewModel.isValidNameInputStateFlow.collectAsState().value
-        ) { input ->
-            viewModel.onNameChange(input)
-        }
-        SurnameInput(
-            modifier = Modifier
-                .padding(mediumPadding)
-                .fillMaxWidth(),
-            isValid = viewModel.isValidSurnameInputStateFlow.collectAsState().value
-        ) { input ->
-            viewModel.onSurnameChange(input)
-        }
-        EmailInput(
-            modifier = Modifier
-                .padding(mediumPadding)
-                .fillMaxWidth(),
-            isValid = viewModel.isValidEmailInputStateFlow.collectAsState().value
-        ) { input ->
-            viewModel.onEmailChange(input)
-        }
-        PasswordInput(
-            modifier = Modifier
-                .padding(mediumPadding)
-                .fillMaxWidth(),
-            isValid = viewModel.isValidPasswordInputStateFlow.collectAsState().value
-        ) { input ->
-            viewModel.onPasswordChange(input)
-        }
+    LaunchedEffect(key1 = stateScreen) {
+        when (val state = stateScreen) {
+            is RegisterScreenStates.Loading -> onLoadingState(true)
+            is RegisterScreenStates.Success -> onSuccessNavigate()
 
-        Button(onClick = navCameraAction) {
-            Text("Tomar foto")
+            is RegisterScreenStates.Error -> {
+                onLoadingState(false)
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+            }
+
+            else -> Unit
         }
     }
-}
-
-@Composable
-private fun NameInput(
-    modifier: Modifier,
-    isValid: Boolean = false,
-    onNameChange: (String) -> Unit,
-) {
-
-    MyFormTextField(
-        modifier = modifier,
-        hint = "Nombre",
-        errorText = "El nombre no puede estar vacio",
-        isValidInput = isValid,
-        onChangeTextListener = onNameChange,
-    )
-}
-
-@Composable
-private fun SurnameInput(
-    modifier: Modifier,
-    isValid: Boolean = false,
-    onInputChange: (String) -> Unit,
-) {
-
-    MyFormTextField(
-        modifier = modifier,
-        hint = "Apellido",
-        onChangeTextListener = onInputChange,
-        errorText = "El apellido no puede estar vacio",
-        isValidInput = isValid
-    )
-}
-
-@Composable
-private fun EmailInput(
-    modifier: Modifier,
-    isValid: Boolean = false,
-    onInputChange: (String) -> Unit
-) {
-    MyFormTextField(
-        modifier = modifier,
-        hint = "Correo",
-        onChangeTextListener = onInputChange,
-        errorText = "El correo no es valido",
-        isValidInput = isValid
-    )
-}
-
-@Composable
-private fun PasswordInput(
-    modifier: Modifier,
-    isValid: Boolean = false,
-    onInputChange: (String) -> Unit
-) {
-    var isPasswordVisible by remember { mutableStateOf(false) }
-    MyPasswordTextField(
-        modifier = modifier,
-        hint = "Contraseña",
-        isPasswordVisible = isPasswordVisible,
-        trailingIconClick = {
-            isPasswordVisible = !isPasswordVisible
-        },
-        onChangeTextListener = onInputChange,
-        isValidInput = isValid
-    )
 }
 

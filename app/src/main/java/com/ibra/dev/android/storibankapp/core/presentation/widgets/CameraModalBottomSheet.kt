@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.register.presentations.screen
+package com.ibra.dev.android.storibankapp.core.presentation.widgets
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
