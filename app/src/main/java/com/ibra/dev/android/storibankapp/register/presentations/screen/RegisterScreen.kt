@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,9 +30,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.LoginDestination
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
+import com.ibra.dev.android.storibankapp.core.presentation.navigations.TakePictureDniDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyFormTextField
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyPasswordTextField
+import com.ibra.dev.android.storibankapp.core.presentation.widgets.RequestCameraPermission
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
 import com.ibra.dev.android.storibankapp.ui.theme.mediumPadding
@@ -44,7 +47,11 @@ fun SingUpScreen(navController: NavController) {
 
     val stateScreen by registerViewModel.screenEventsStateFlow.collectAsState()
 
+    var requestCameraPermission by remember { mutableStateOf(false) }
+
     var isLoading by remember { mutableStateOf(false) }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -63,6 +70,25 @@ fun SingUpScreen(navController: NavController) {
 
             else -> Unit
         }
+    }
+
+    if (requestCameraPermission) {
+        RequestCameraPermission { granted ->
+            if (granted) {
+                showBottomSheet = true
+            } else {
+                Toast.makeText(context, "Permiso denegado", Toast.LENGTH_SHORT).show()
+            }
+            requestCameraPermission = false
+        }
+    }
+
+    if (showBottomSheet) {
+        CameraModalBottomSheet(
+            onBitmapCaptured = {
+                showBottomSheet = false
+            }
+        )
     }
 
     Scaffold(
@@ -91,7 +117,10 @@ fun SingUpScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.TopCenter),
-                    viewModel = registerViewModel
+                    viewModel = registerViewModel,
+                    navCameraAction = {
+                        requestCameraPermission = true
+                    }
                 )
                 MyButton(
                     modifier = Modifier
@@ -112,6 +141,7 @@ fun SingUpScreen(navController: NavController) {
 private fun RegisterForm(
     modifier: Modifier,
     viewModel: RegisterScreenViewModel,
+    navCameraAction: () -> Unit
 ) {
     Column(modifier = modifier) {
         NameInput(
@@ -145,6 +175,10 @@ private fun RegisterForm(
             isValid = viewModel.isValidPasswordInputStateFlow.collectAsState().value
         ) { input ->
             viewModel.onPasswordChange(input)
+        }
+
+        Button(onClick = navCameraAction) {
+            Text("Tomar foto")
         }
     }
 }
