@@ -1,11 +1,11 @@
 package com.ibra.dev.android.storibankapp.core.data.datasource
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
 import com.ibra.dev.android.storibankapp.core.utils.orAlternative
-import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -35,6 +35,7 @@ class UserRemoteDataSourceImpl(
             database.collection(CLIENTS_COLLECTION).document(user.email).set(user).await()
             emit(UserResponse(isSuccess = true, message = "User created successfully"))
         } catch (e: Exception) {
+            Log.e(this::class.java.simpleName, "createUser: ${e.message}", e)
             emit(
                 UserResponse(
                     isSuccess = false,
