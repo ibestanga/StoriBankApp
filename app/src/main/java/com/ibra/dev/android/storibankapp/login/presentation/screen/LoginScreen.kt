@@ -104,7 +104,7 @@ private fun LoginForm(
 
     var inputPassword by remember { mutableStateOf("") }
 
-    var hasErrorInputEmail by remember { mutableStateOf(false) }
+    var isValidEmail by remember { mutableStateOf(true) }
 
     Column(
         modifier = modifier
@@ -118,9 +118,9 @@ private fun LoginForm(
             hint = "Email",
             onChangeTextListener = { input ->
                 inputEmail = input
-                hasErrorInputEmail = !Patterns.EMAIL_ADDRESS.matcher(input).matches()
+                isValidEmail = Patterns.EMAIL_ADDRESS.matcher(input).matches()
             },
-            hasErrorInputText = hasErrorInputEmail,
+            isValidInput = isValidEmail,
             errorText = "Email invalido"
         )
 
@@ -139,7 +139,7 @@ private fun LoginForm(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .padding(top = xLargePadding),
-            isEnable = !hasErrorInputEmail && inputPassword.isNotEmpty() && inputEmail.isNotEmpty(),
+            isEnable = isValidEmail && inputPassword.isNotEmpty() && inputEmail.isNotEmpty(),
             text = "Iniciar sesion"
         ) {
             onclickLoginButton(inputEmail, inputPassword)

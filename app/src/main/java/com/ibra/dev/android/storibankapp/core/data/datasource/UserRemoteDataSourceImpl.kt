@@ -5,6 +5,7 @@ import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSourc
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
 import com.ibra.dev.android.storibankapp.core.utils.orAlternative
+import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -24,19 +25,24 @@ class UserRemoteDataSourceImpl(
     }
 
     override suspend fun createUser(user: UserEntity): Flow<UserResponse> = flow {
-        user.email?.let { email ->
-            try {
-                database.collection(CLIENTS_COLLECTION).document(email).set(user).await()
-                emit(UserResponse(isSuccess = true, message = "User created successfully"))
-            } catch (e: Exception) {
-                emit(
-                    UserResponse(
-                        isSuccess = false,
-                        message = e.message.orAlternative("Unknown error occurred")
-                    )
+
+        if (user.email.isNullOrEmpty()) {
+            emit(UserResponse(isSuccess = false, message = "Email is required"))
+            return@flow
+        }
+
+        try {
+            database.collection(CLIENTS_COLLECTION).document(user.email).set(user).await()
+            emit(UserResponse(isSuccess = true, message = "User created successfully"))
+        } catch (e: Exception) {
+            emit(
+                UserResponse(
+                    isSuccess = false,
+                    message = e.message.orAlternative("Unknown error occurred")
                 )
-            }
-        } ?: emit(UserResponse(isSuccess = false, message = "Email is required"))
+            )
+        }
+
     }
 
     override suspend fun updateUser(user: UserEntity): Flow<UserResponse> {

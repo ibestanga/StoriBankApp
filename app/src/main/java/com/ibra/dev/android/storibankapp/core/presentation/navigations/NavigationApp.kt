@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ibra.dev.android.storibankapp.home.presentation.screens.HomeView
 import com.ibra.dev.android.storibankapp.login.presentation.screen.LoginScreen
-import com.ibra.dev.android.storibankapp.register.presentations.screen.RegisterScreen
+import com.ibra.dev.android.storibankapp.register.presentations.screen.SingUpScreen
 
 @Composable
 fun AppNav() {
@@ -25,7 +25,7 @@ fun AppNav() {
         }
 
         composable<RegisterDestination> {
-            RegisterScreen(navController)
+            SingUpScreen(navController)
         }
 //
 //        composable<TakePictureDniDestination> {

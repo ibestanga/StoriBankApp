@@ -42,7 +42,7 @@ fun MyFormTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     errorText: String = stringResource(R.string.generic_error_text_field),
-    hasErrorInputText: Boolean = false,
+    isValidInput: Boolean = true,
     onChangeTextListener: (String) -> Unit,
 ) {
     var text by rememberSaveable { mutableStateOf("") }
@@ -60,9 +60,9 @@ fun MyFormTextField(
             text = onChangeText
             onChangeTextListener(onChangeText)
         },
-        isError = hasErrorInputText,
+        isError = isValidInput.not(),
         supportingText = {
-            if (hasErrorInputText) {
+            if (isValidInput.not()) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = errorText,
@@ -89,7 +89,7 @@ fun MyPasswordTextField(
     hint: String,
     isPasswordVisible: Boolean = false,
     errorText: String = "",
-    isError: Boolean = false,
+    isValidInput: Boolean = true,
     trailingIconClick: (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     onChangeTextListener: (String) -> Unit,
@@ -116,9 +116,9 @@ fun MyPasswordTextField(
             text = onChangeText
             onChangeTextListener(onChangeText)
         },
-        isError = isError,
+        isError = isValidInput.not(),
         supportingText = {
-            if (isError) {
+            if (isValidInput.not()) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = errorText,
