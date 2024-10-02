@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.R
@@ -65,11 +66,12 @@ fun SingUpScreen(navController: NavController) {
     )
 
     if (requestCameraPermission) {
+        val errorMessage = stringResource(R.string.sing_up_success_message)
         RequestCameraPermission { granted ->
             if (granted) {
                 showCameraBottomSheet = true
             } else {
-                Toast.makeText(context, "Permiso denegado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             }
             requestCameraPermission = false
         }
@@ -156,7 +158,7 @@ private fun HandlerScreenState(
                 onLoadingState(true)
                 navController.navigate(
                     SingUpResultDestination(
-                        msg = context.getString(R.string.tu_cuenta_ha_sido_creada_exitosamente),
+                        msg = context.getString(R.string.sing_up_success_message),
                         state = BobsitoState.HAPPY
                     )
                 )

@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ibra.dev.android.storibankapp.R
 import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
@@ -32,26 +34,33 @@ fun SingUpForm(
     pictureBitmap: Bitmap?
 ) {
     Column(modifier = modifier) {
-        NameInput(
+        InputForm(
             modifier = Modifier
                 .padding(mediumPadding)
                 .fillMaxWidth(),
+            hint = stringResource(R.string.name_copy),
+            errorText = stringResource(R.string.error_text_field_at_least_three_characters),
             isValid = viewModel.isValidNameInputStateFlow.collectAsState().value
         ) { input ->
             viewModel.onNameChange(input)
         }
-        SurnameInput(
+        InputForm(
             modifier = Modifier
                 .padding(mediumPadding)
                 .fillMaxWidth(),
+            hint = stringResource(R.string.surname_copy),
+            errorText = stringResource(R.string.error_text_field_at_least_three_characters),
             isValid = viewModel.isValidSurnameInputStateFlow.collectAsState().value
         ) { input ->
             viewModel.onSurnameChange(input)
         }
-        EmailInput(
+        InputForm(
             modifier = Modifier
                 .padding(mediumPadding)
                 .fillMaxWidth(),
+            hint = stringResource(R.string.email_copy),
+            errorText = stringResource(R.string.error_text_field_email_invalid),
+            keyboardType = KeyboardType.Email,
             isValid = viewModel.isValidEmailInputStateFlow.collectAsState().value
         ) { input ->
             viewModel.onEmailChange(input)
@@ -85,11 +94,11 @@ fun SingUpForm(
                             .align(Alignment.Center),
                         contentScale = ContentScale.Crop,
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Captured image",
+                        contentDescription = stringResource(id = R.string.generic_content_descriptions),
                     )
                 } ?: Image(
                     painter = painterResource(id = R.drawable.outline_photo_camera_24),
-                    contentDescription = "Add a photo",
+                    contentDescription = stringResource(id = R.string.generic_content_descriptions),
                     modifier = Modifier
                         .padding(mediumPadding)
                         .fillMaxWidth()

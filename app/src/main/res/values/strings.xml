@@ -1,9 +1,24 @@
 <resources>
     <string name="app_name">StoriBankApp</string>
+    <string name="generic_content_descriptions">image description</string>
     <string name="generic_error_text_field">Este campo es requerido</string>
+    <string name="error_text_field_at_least_three_characters">Se requieren al menos 3 caracteres</string>
+    <string name="error_text_field_at_least_six_characters">Se requieren al menos 6 caracteres</string>
+    <string name="error_text_field_email_invalid">Email invalido</string>
+
+<!--    Copys-->
+    <string name="accept_copy">Aceptar</string>
+
+
+<!--   login-->
     <string name="login_dont_have_account">No tienes una Cuenta?</string>
     <string name="login_sing_up_hint">Registrate</string>
-    <string name="accept_copy">Aceptar</string>
-    <string name="generic_content_descriptions">image description</string>
-    <string name="tu_cuenta_ha_sido_creada_exitosamente">Tu cuenta ha sido creada exitosamente</string>
+
+<!--    SingUp-->
+    <string name="sing_up_success_message">Tu cuenta ha sido creada exitosamente</string>
+    <string name="sing_up_denied_camera_permission">Permiso denegado</string>
+    <string name="name_copy">Nombre</string>
+    <string name="surname_copy">Apellido</string>
+    <string name="email_copy">Correo</string>
+    <string name="password_copy">Contraseña</string>
 </resources>
