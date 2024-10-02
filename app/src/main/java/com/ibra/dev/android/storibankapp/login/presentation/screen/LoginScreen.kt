@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.R
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.HomeDestination
+import com.ibra.dev.android.storibankapp.core.presentation.navigations.LoginDestination
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyFormTextField
@@ -63,10 +65,20 @@ fun LoginScreen(navController: NavController) {
             is LoginStates.Loading -> isLoading = true
             is LoginStates.Success -> {
                 isLoading = false
-                navController.navigate(HomeDestination(state.email))
+                navController.navigate(HomeDestination(state.email)) {
+                    popUpTo(LoginDestination) {
+                        inclusive = true
+                    }
+                }
             }
 
             LoginStates.Init -> Unit
+        }
+    }
+
+    DisposableEffect(null) {
+        onDispose {
+            loginViewModel.clearState()
         }
     }
 

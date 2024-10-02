@@ -32,4 +32,8 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun clearState() {
+        _loginScreenEventsStateFlow.value = LoginStates.Init
+    }
 }

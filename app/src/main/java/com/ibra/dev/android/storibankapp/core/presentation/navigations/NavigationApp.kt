@@ -17,7 +17,7 @@ fun AppNav() {
 
     NavHost(
         navController = navController,
-        startDestination = HomeDestination("ibra@test.com")
+        startDestination = LoginDestination
     ) {
         composable<HomeDestination> { backStackEntry ->
             val email: String = backStackEntry.toRoute<HomeDestination>().email
