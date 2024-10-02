@@ -4,7 +4,7 @@ import com.ibra.dev.android.storibankapp.register.presentations.screen.result.Bo
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeDestination
+data class HomeDestination(val email: String)
 
 @Serializable
 object LoginDestination

@@ -18,7 +18,7 @@ class CanUserLoginUseCaseImpl(
         }.collect { response ->
             result = if (response.isSuccess == true) {
                 if (response.data?.password == password) {
-                    LoginStates.Success
+                    LoginStates.Success(email)
                 } else {
                     LoginStates.Error("Invalid password")
                 }

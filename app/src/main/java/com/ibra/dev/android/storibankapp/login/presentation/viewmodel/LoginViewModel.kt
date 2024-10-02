@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ibra.dev.android.storibankapp.login.domain.contracts.CanUserLoginUseCase
 import com.ibra.dev.android.storibankapp.login.presentation.states.LoginStates
+import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +19,8 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: CanUserLoginUseCase
 ) : ViewModel() {
 
-    private val _loginScreenEventsStateFlow = MutableStateFlow<LoginStates?>(null)
-    val loginScreenEventsStateFlow: StateFlow<LoginStates?> get() = _loginScreenEventsStateFlow
+    private val _loginScreenEventsStateFlow = MutableStateFlow<LoginStates>(LoginStates.Init)
+    val loginScreenEventsStateFlow: StateFlow<LoginStates> get() = _loginScreenEventsStateFlow
 
     fun tryLogin(email: String, password: String) {
         _loginScreenEventsStateFlow.value = LoginStates.Loading

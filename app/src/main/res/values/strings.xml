@@ -21,4 +21,7 @@
     <string name="surname_copy">Apellido</string>
     <string name="email_copy">Correo</string>
     <string name="password_copy">Contraseña</string>
+
+<!--    Home-->
+    <string name="home_title">Home</string>
 </resources>

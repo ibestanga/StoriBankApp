@@ -61,12 +61,12 @@ fun LoginScreen(navController: NavController) {
             }
 
             is LoginStates.Loading -> isLoading = true
-            LoginStates.Success -> {
+            is LoginStates.Success -> {
                 isLoading = false
-                navController.navigate(HomeDestination)
+                navController.navigate(HomeDestination(state.email))
             }
 
-            null -> Unit
+            LoginStates.Init -> Unit
         }
     }
 

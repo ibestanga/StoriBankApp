@@ -27,7 +27,7 @@ class UserRemoteDataSourceImpl(
                         responseDeferred.complete(
                             UserResponse(
                                 isSuccess = true,
-                                message = "User found",
+                                message = USER_FOUND,
                                 data = it
                             )
                         )
@@ -44,7 +44,7 @@ class UserRemoteDataSourceImpl(
                 responseDeferred.complete(
                     UserResponse(
                         isSuccess = false,
-                        message = exception.message.orAlternative("Unknown error occurred")
+                        message = exception.message.orAlternative(UNKNOWN_ERROR_OCCURRED)
                     )
                 )
             }
@@ -59,7 +59,7 @@ class UserRemoteDataSourceImpl(
             emit(
                 UserResponse(
                     isSuccess = false,
-                    message = "User already exists"
+                    message = USER_ALREADY_EXISTS
                 )
             )
         }
@@ -84,7 +84,7 @@ class UserRemoteDataSourceImpl(
                     responseDeferred.complete(
                         UserResponse(
                             isSuccess = true,
-                            message = "User created",
+                            message = USER_CREATED,
                             data = user
                         )
                     )
@@ -92,14 +92,14 @@ class UserRemoteDataSourceImpl(
                     responseDeferred.complete(
                         UserResponse(
                             isSuccess = false,
-                            message = exception.message.orAlternative("Unknown error occurred")
+                            message = exception.message.orAlternative(UNKNOWN_ERROR_OCCURRED)
                         )
                     )
                 }
             responseDeferred.await()
         } ?: UserResponse(
             isSuccess = false,
-            message = "User email is null"
+            message = USER_EMAIL_IS_NULL
         )
     }
 
@@ -123,5 +123,10 @@ class UserRemoteDataSourceImpl(
     companion object {
         private const val USER_NOT_FOUND = "User not found"
         private const val CLIENTS_COLLECTION = "clients"
+        private const val UNKNOWN_ERROR_OCCURRED = "Unknown error occurred"
+        private const val USER_ALREADY_EXISTS = "User already exists"
+        private const val USER_FOUND = "User found"
+        private const val USER_CREATED = "User created"
+        private const val USER_EMAIL_IS_NULL = "User email is null"
     }
 }
