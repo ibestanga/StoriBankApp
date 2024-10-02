@@ -1,7 +1,7 @@
 package com.ibra.dev.android.storibankapp.register.domain.usecase
 
-import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
+import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import io.mockk.coEvery
@@ -25,7 +25,7 @@ class CreateUserUseCaseImplTest {
             // Given
             val repository = providerRepository()
             val sut = providerSut(repository)
-            val user = UserEntity("email", "password")
+            val user = UserSingUpDto("email", "password")
             val userResponse = UserResponse(true, "success")
 
             coEvery { repository.registerUser(any()) } returns flowOf(userResponse)
@@ -43,7 +43,7 @@ class CreateUserUseCaseImplTest {
             // Given
             val repository = providerRepository()
             val sut = providerSut(repository)
-            val user = UserEntity("email", "password")
+            val user = UserSingUpDto("email", "password")
             val userResponse = UserResponse(false, "error")
 
             coEvery { repository.registerUser(any()) } returns flowOf(userResponse)

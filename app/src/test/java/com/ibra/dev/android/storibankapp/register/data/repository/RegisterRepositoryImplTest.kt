@@ -1,8 +1,10 @@
 package com.ibra.dev.android.storibankapp.register.data.repository
 
+import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
+import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,22 +19,28 @@ class RegisterRepositoryImplTest {
 
     private fun providerUserDataSource(): UserRemoteDataSource = mockk(relaxed = true)
 
-    private fun providerSut(dataSource: UserRemoteDataSource): RegisterRepository {
-        return RegisterRepositoryImpl(dataSource)
+    private fun providerImageStoreManager() = mockk<ImageStoreManager>(relaxed = true)
+
+    private fun providerSut(
+        dataSource: UserRemoteDataSource,
+        imageStoreManager: ImageStoreManager
+    ): RegisterRepository {
+        return RegisterRepositoryImpl(dataSource, imageStoreManager)
     }
 
     @Test
     fun `when call registerUser should call userRemoteDataSource registerUser`() = runTest {
         // given
         val dataSource = providerUserDataSource()
-        val sut = providerSut(dataSource)
-        val userEntity = UserEntity("test", "test")
+        val imageStoreManager = providerImageStoreManager()
+        val sut = providerSut(dataSource, imageStoreManager)
+        val userEntity = UserSingUpDto("test", "test")
 
         // when
         sut.registerUser(userEntity)
 
         // then
-        coVerify { dataSource.createUser(userEntity) }
+        coVerify { dataSource.createUser(any()) }
     }
 
     @Test
@@ -40,8 +48,9 @@ class RegisterRepositoryImplTest {
         runTest() {
             // given
             val dataSource = providerUserDataSource()
-            val sut = providerSut(dataSource)
-            val userEntity = UserEntity("test", "test")
+            val imageStoreManager = providerImageStoreManager()
+            val sut = providerSut(dataSource, imageStoreManager)
+            val userEntity = UserSingUpDto("test", "test")
             val messageExpected = "test"
 
             coEvery { dataSource.createUser(any()) } returns flowOf(

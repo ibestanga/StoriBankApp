@@ -23,11 +23,7 @@ class CoreModule {
     @Provides
     @Singleton
     fun provideFirebaseFirestore(): FirebaseFirestore {
-        return Firebase.firestore.apply {
-            firestoreSettings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build()
-        }
+        return Firebase.firestore
     }
 
     @Provides

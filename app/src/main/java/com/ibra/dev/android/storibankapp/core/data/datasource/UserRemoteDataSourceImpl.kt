@@ -1,13 +1,11 @@
 package com.ibra.dev.android.storibankapp.core.data.datasource
 
-import android.database.sqlite.SQLiteBlobTooBigException
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
 import com.ibra.dev.android.storibankapp.core.utils.orAlternative
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -16,45 +14,60 @@ class UserRemoteDataSourceImpl(
     private val firestore: FirebaseFirestore
 ) : UserRemoteDataSource {
     override suspend fun getUser(email: String): Flow<UserResponse> = flow {
-        val snapshot = firestore.collection(CLIENTS_COLLECTION).document(email).get().await()
-        if (snapshot.exists()) {
-            snapshot.toObject(UserEntity::class.java)?.let {
-                emit(UserResponse(isSuccess = true, message = "User found", data = it))
+        val responseDeferred: CompletableDeferred<UserResponse> = CompletableDeferred()
+        firestore.collection(CLIENTS_COLLECTION).document(email).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    snapshot.toObject(UserEntity::class.java)?.let {
+                        responseDeferred.complete(
+                            UserResponse(
+                                isSuccess = true,
+                                message = "User found",
+                                data = it
+                            )
+                        )
+                    }
+                } else {
+                    responseDeferred.complete(
+                        UserResponse(
+                            isSuccess = false,
+                            message = USER_NOT_FOUND
+                        )
+                    )
+                }
+            }.addOnFailureListener { exception ->
+                responseDeferred.complete(
+                    UserResponse(
+                        isSuccess = false,
+                        message = exception.message.orAlternative("Unknown error occurred")
+                    )
+                )
             }
-        } else {
-            emit(UserResponse(isSuccess = false, message = USER_NOT_FOUND))
-        }
+        emit(responseDeferred.await())
     }
 
     override suspend fun createUser(user: UserEntity): Flow<UserResponse> = flow {
-
-        if (user.email.isNullOrEmpty()) {
-            emit(UserResponse(isSuccess = false, message = "Email is required"))
-            return@flow
+        user.email?.let {
+            val responseDeferred: CompletableDeferred<UserResponse> = CompletableDeferred()
+            firestore.collection(CLIENTS_COLLECTION).document(it).set(user)
+                .addOnSuccessListener {
+                    responseDeferred.complete(
+                        UserResponse(
+                            isSuccess = true,
+                            message = "User created",
+                            data = user
+                        )
+                    )
+                }.addOnFailureListener { exception ->
+                    responseDeferred.complete(
+                        UserResponse(
+                            isSuccess = false,
+                            message = exception.message.orAlternative("Unknown error occurred")
+                        )
+                    )
+                }
+            emit(responseDeferred.await())
         }
-
-        try {
-            Log.i("UserRemoteDataSourceImpl", "createUser: user: $user")
-            firestore.collection(CLIENTS_COLLECTION).document(user.email).set(user).await()
-            emit(UserResponse(isSuccess = true, message = "User created successfully"))
-        } catch (e: Exception) {
-            Log.e(this::class.java.simpleName, "createUser: ${e.message}", e)
-            emit(
-                UserResponse(
-                    isSuccess = false,
-                    message = e.message.orAlternative("Unknown error occurred")
-                )
-            )
-        } catch (e: SQLiteBlobTooBigException) {
-            Log.e(this::class.java.simpleName, "createUser: ${e.message}", e)
-            emit(
-                UserResponse(
-                    isSuccess = false,
-                    message = e.message.orAlternative("Unknown error occurred")
-                )
-            )
-        }
-
     }
 
     override suspend fun updateUser(user: UserEntity): Flow<UserResponse> {

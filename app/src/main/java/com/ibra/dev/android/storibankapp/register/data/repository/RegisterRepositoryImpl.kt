@@ -1,5 +1,6 @@
 package com.ibra.dev.android.storibankapp.register.data.repository
 
+import android.graphics.Bitmap
 import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
@@ -8,7 +9,6 @@ import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
 import com.ibra.dev.android.storibankapp.login.domain.models.toUserEntity
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -19,16 +19,8 @@ class RegisterRepositoryImpl(
 ) : RegisterRepository {
     override suspend fun registerUser(user: UserSingUpDto): Flow<UserResponse> {
         return try {
-            val urlPictureDni: CompletableDeferred<String> = CompletableDeferred()
-            coroutineScope {
-                    imageStoreManager.uploadImageDni(
-                        user.dniPicture,
-                        { url -> urlPictureDni.complete(url) },
-                        { exception -> throw exception }
-                    )
-            }
-            val axu = urlPictureDni.await()
-            userRemoteDataSource.createUser(user.toUserEntity().copy(urlDniPicture = axu))
+            val imageUrl = user.dniPicture?.let { uploadImageDni(it) }
+            userRemoteDataSource.createUser(user.toUserEntity().copy(urlDniPicture = imageUrl))
         } catch (e: Exception) {
             flowOf(
                 UserResponse(
@@ -37,5 +29,17 @@ class RegisterRepositoryImpl(
                 )
             )
         }
+    }
+
+    private suspend fun uploadImageDni(dniPicture: Bitmap): String {
+        val urlDeferred: CompletableDeferred<String> = CompletableDeferred()
+        coroutineScope {
+            imageStoreManager.uploadImageDni(
+                dniPicture,
+                { url -> urlDeferred.complete(url) },
+                { exception -> throw exception }
+            )
+        }
+        return urlDeferred.await()
     }
 }
