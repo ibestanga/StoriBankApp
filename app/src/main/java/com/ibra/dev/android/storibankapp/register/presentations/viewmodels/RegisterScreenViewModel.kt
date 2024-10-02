@@ -1,7 +1,6 @@
 package com.ibra.dev.android.storibankapp.register.presentations.viewmodels
 
 import android.graphics.Bitmap
-import android.util.Base64
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +9,11 @@ import com.ibra.dev.android.storibankapp.login.domain.models.isValid
 import com.ibra.dev.android.storibankapp.register.domain.contracts.CreateUserUseCase
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,6 +77,11 @@ class RegisterScreenViewModel @Inject constructor(
         _isValidPasswordInputStateFlow.value = isValidField(password, 6).also { isValid ->
             if (isValid) userInfo = userInfo.copy(password = password)
         }
+        isEnableButton()
+    }
+
+    fun onPictureChange(picture: Bitmap) {
+        userInfo = userInfo.copy(dniPicture = picture)
         isEnableButton()
     }
 

@@ -79,6 +79,7 @@ fun SingUpScreen(navController: NavController) {
     if (showBottomSheet) {
         CameraModalBottomSheet(
             onBitmapCaptured = { bitmap ->
+                registerViewModel.onPictureChange(bitmap)
                 pictureBitmap = bitmap
                 showBottomSheet = false
             }

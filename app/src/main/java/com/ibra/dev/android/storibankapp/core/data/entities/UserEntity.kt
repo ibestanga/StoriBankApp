@@ -7,5 +7,5 @@ data class UserEntity(
     val password: String? = null,
     val movements: List<MovementsEntity> = emptyList(),
     val balance: Double = 0.0,
-    val dniPicture: String? = null
+    val urlDniPicture: String? = null
 )

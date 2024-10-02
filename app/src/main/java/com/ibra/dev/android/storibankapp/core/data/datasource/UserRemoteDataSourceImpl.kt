@@ -1,7 +1,9 @@
 package com.ibra.dev.android.storibankapp.core.data.datasource
 
+import android.database.sqlite.SQLiteBlobTooBigException
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
@@ -11,10 +13,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
 class UserRemoteDataSourceImpl(
-    private val database: FirebaseFirestore
+    private val firestore: FirebaseFirestore
 ) : UserRemoteDataSource {
     override suspend fun getUser(email: String): Flow<UserResponse> = flow {
-        val snapshot = database.collection(CLIENTS_COLLECTION).document(email).get().await()
+        val snapshot = firestore.collection(CLIENTS_COLLECTION).document(email).get().await()
         if (snapshot.exists()) {
             snapshot.toObject(UserEntity::class.java)?.let {
                 emit(UserResponse(isSuccess = true, message = "User found", data = it))
@@ -32,9 +34,18 @@ class UserRemoteDataSourceImpl(
         }
 
         try {
-            database.collection(CLIENTS_COLLECTION).document(user.email).set(user).await()
+            Log.i("UserRemoteDataSourceImpl", "createUser: user: $user")
+            firestore.collection(CLIENTS_COLLECTION).document(user.email).set(user).await()
             emit(UserResponse(isSuccess = true, message = "User created successfully"))
         } catch (e: Exception) {
+            Log.e(this::class.java.simpleName, "createUser: ${e.message}", e)
+            emit(
+                UserResponse(
+                    isSuccess = false,
+                    message = e.message.orAlternative("Unknown error occurred")
+                )
+            )
+        } catch (e: SQLiteBlobTooBigException) {
             Log.e(this::class.java.simpleName, "createUser: ${e.message}", e)
             emit(
                 UserResponse(

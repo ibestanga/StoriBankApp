@@ -1,5 +1,6 @@
 package com.ibra.dev.android.storibankapp.login.domain.models
 
+import android.graphics.Bitmap
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity
 import com.ibra.dev.android.storibankapp.core.utils.EMPTY_STRING
 
@@ -8,11 +9,11 @@ data class UserSingUpDto(
     val surname: String = EMPTY_STRING,
     val email: String = EMPTY_STRING,
     val password: String = EMPTY_STRING,
-    val dniPicture: String = EMPTY_STRING
+    val dniPicture: Bitmap? = null
 )
 
 fun UserSingUpDto.isValid(): Boolean {
-    return name.isNotEmpty() && surname.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
+    return name.isNotEmpty() && surname.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && dniPicture != null
 }
 
 fun UserSingUpDto.toUserEntity(): UserEntity {
@@ -21,6 +22,5 @@ fun UserSingUpDto.toUserEntity(): UserEntity {
         surname = surname,
         email = email,
         password = password,
-        dniPicture = dniPicture
     )
 }
