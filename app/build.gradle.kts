@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-//    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     id("kotlin-kapt")
     kotlin("plugin.serialization") version "1.8.20"
@@ -78,6 +77,7 @@ dependencies {
     implementation(libs.androidx.material3)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.coil.compose)
 
 
     implementation(libs.androidx.navigation.compose)

@@ -1,5 +1,6 @@
 package com.ibra.dev.android.storibankapp.home.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,7 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,11 +37,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.ibra.dev.android.storibankapp.R
 import com.ibra.dev.android.storibankapp.core.data.entities.MovementsEntity
 import com.ibra.dev.android.storibankapp.core.utils.orZero
@@ -107,7 +117,6 @@ fun HomeView(navController: NavController, email: String) {
             } else {
                 userDto?.let { dto ->
                     HomeBody(
-                        modifier = Modifier.fillMaxSize(),
                         userDto = dto
                     )
                 }
@@ -118,9 +127,9 @@ fun HomeView(navController: NavController, email: String) {
 
 @Composable
 fun HomeBody(modifier: Modifier = Modifier, userDto: HomeUserDto) {
+
     Column(
         modifier = modifier.padding(xLargePadding),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -133,49 +142,53 @@ fun HomeBody(modifier: Modifier = Modifier, userDto: HomeUserDto) {
             elevation = CardDefaults.cardElevation(defaultElevation = defaultElevation),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "Balance: ${userDto.balance}",
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineSmall
                 )
 
-                Column(
-                    modifier = Modifier.align(Alignment.Center)
-                ) {
-                    Text(
-                        text = "Cliente: ${userDto.name} ${userDto.surname}",
-                        modifier = Modifier,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                Text(
+                    text = "Cliente: ${userDto.name} ${userDto.surname}",
+                    modifier = Modifier,
+                    style = MaterialTheme.typography.bodySmall
+                )
 
-                    Text(
-                        text = "Email: ${userDto.email}",
-                        modifier = Modifier,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
+                Text(
+                    text = "Email: ${userDto.email}",
+                    modifier = Modifier,
+                    style = MaterialTheme.typography.bodySmall
+                )
 
-
+                AsyncImage(
+                    model = userDto.urlDniPicture,
+                    contentDescription = "Imagen con esquinas redondeadas",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(16.dp)) // Esquinas redondeadas
+                )
             }
         }
 
         Text(
-            modifier = modifier.padding(top = xLargePadding, bottom = xLargePadding),
+            modifier = Modifier.padding(top = xLargePadding),
             text = "Movimientos",
             style = MaterialTheme.typography.headlineLarge
         )
 
         Text(
-            modifier = modifier.padding(top = mediumPadding, bottom = xLargePadding),
+            modifier = Modifier.padding(top = mediumPadding),
             text = "Tipo - Monto",
             style = MaterialTheme.typography.titleLarge
         )
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
