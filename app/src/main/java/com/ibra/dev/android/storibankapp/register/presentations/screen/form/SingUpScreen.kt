@@ -1,6 +1,5 @@
 package com.ibra.dev.android.storibankapp.register.presentations.screen.form
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -28,8 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.ibra.dev.android.storibankapp.core.presentation.navigations.LoginDestination
-import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
+import com.ibra.dev.android.storibankapp.R
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.SingUpResultDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.CameraModalBottomSheet
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
@@ -60,8 +58,10 @@ fun SingUpScreen(navController: NavController) {
     HandlerScreenState(
         navController,
         stateScreen,
-        context,
-        onLoadingState = { isLoading = it }
+        onLoadingState = {
+            isLoading = it
+            registerViewModel.reInitState()
+        }
     )
 
     if (requestCameraPermission) {
@@ -146,9 +146,9 @@ private fun CameraBottomDialog(
 private fun HandlerScreenState(
     navController: NavController,
     stateScreen: RegisterScreenStates,
-    context: Context,
     onLoadingState: (Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
     LaunchedEffect(key1 = stateScreen) {
         when (stateScreen) {
             is RegisterScreenStates.Loading -> onLoadingState(true)
@@ -156,7 +156,7 @@ private fun HandlerScreenState(
                 onLoadingState(true)
                 navController.navigate(
                     SingUpResultDestination(
-                        msg = "Tu cuenta ha sido creada exitosamente",
+                        msg = context.getString(R.string.tu_cuenta_ha_sido_creada_exitosamente),
                         state = BobsitoState.HAPPY
                     )
                 )
@@ -167,7 +167,7 @@ private fun HandlerScreenState(
                 navController.navigate(
                     SingUpResultDestination(
                         msg = stateScreen.message,
-                        state = BobsitoState.HAPPY
+                        state = BobsitoState.SAD
                     )
                 )
             }

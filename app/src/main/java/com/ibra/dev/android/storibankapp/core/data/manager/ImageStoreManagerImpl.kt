@@ -13,7 +13,7 @@ class ImageStoreManagerImpl(
 
     private val storageReference = firebaseStorage.reference
 
-    override suspend fun uploadImageDni(
+    override suspend fun uploadImage(
         image: Bitmap?,
         onSuccess: (String) -> Unit,
         onFailure: (Exception) -> Unit

@@ -1,6 +1,5 @@
 package com.ibra.dev.android.storibankapp.register.di
 
-import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import com.ibra.dev.android.storibankapp.register.data.repository.RegisterRepositoryImpl
@@ -22,10 +21,9 @@ class RegisterModule {
 
     @Provides
     fun provideRegisterRepository(
-        userRemoteDataSource: UserRemoteDataSource,
-        manager: ImageStoreManager
+        userRemoteDataSource: UserRemoteDataSource
     ): RegisterRepository {
-        return RegisterRepositoryImpl(userRemoteDataSource, manager)
+        return RegisterRepositoryImpl(userRemoteDataSource)
     }
 
 

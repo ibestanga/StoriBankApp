@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 
 interface ImageStoreManager {
 
-    suspend fun uploadImageDni(
+    suspend fun uploadImage(
         image: Bitmap?,
         onSuccess: (String) -> Unit,
         onFailure: (Exception) -> Unit

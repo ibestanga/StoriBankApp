@@ -1,7 +1,6 @@
 package com.ibra.dev.android.storibankapp.core.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -29,9 +28,13 @@ class CoreModule {
     @Provides
     @Singleton
     fun provideUserRemoteDataSource(
-        firestore: FirebaseFirestore
+        firestore: FirebaseFirestore,
+        imageStoreManager: ImageStoreManager
     ): UserRemoteDataSource {
-        return UserRemoteDataSourceImpl(firestore)
+        return UserRemoteDataSourceImpl(
+            firestore,
+            imageStoreManager
+        )
     }
 
     @Provides

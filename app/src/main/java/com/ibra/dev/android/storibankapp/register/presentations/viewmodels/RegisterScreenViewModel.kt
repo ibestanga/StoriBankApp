@@ -51,6 +51,10 @@ class RegisterScreenViewModel @Inject constructor(
         }
     }
 
+    fun reInitState() {
+        _screenEventsStateFlow.value = RegisterScreenStates.Initial
+    }
+
     fun onNameChange(name: String) {
         _isValidNameInputStateFlow.value = isValidField(name, 3).also { isValid ->
             if (isValid) userInfo = userInfo.copy(name = name)
