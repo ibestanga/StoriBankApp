@@ -4,9 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ibra.dev.android.storibankapp.home.presentation.screens.HomeView
 import com.ibra.dev.android.storibankapp.login.presentation.screen.LoginScreen
-import com.ibra.dev.android.storibankapp.register.presentations.screen.SingUpScreen
+import com.ibra.dev.android.storibankapp.register.presentations.screen.form.SingUpScreen
+import com.ibra.dev.android.storibankapp.register.presentations.screen.result.BobsitoState
+import com.ibra.dev.android.storibankapp.register.presentations.screen.result.SingUpResultScreen
 
 @Composable
 fun AppNav() {
@@ -26,6 +29,12 @@ fun AppNav() {
 
         composable<RegisterDestination> {
             SingUpScreen(navController)
+        }
+
+        composable<SingUpResultDestination> { backStackEntry ->
+            val msg: String = backStackEntry.toRoute<SingUpResultDestination>().msg
+            val state: BobsitoState = backStackEntry.toRoute<SingUpResultDestination>().state
+            SingUpResultScreen(navController, msg, state)
         }
     }
 }

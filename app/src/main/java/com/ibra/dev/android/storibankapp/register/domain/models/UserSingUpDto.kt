@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.login.domain.models
+package com.ibra.dev.android.storibankapp.register.domain.models
 
 import android.graphics.Bitmap
 import com.ibra.dev.android.storibankapp.core.data.entities.UserEntity

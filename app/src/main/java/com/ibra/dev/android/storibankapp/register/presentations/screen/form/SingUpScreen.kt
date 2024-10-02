@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.register.presentations.screen
+package com.ibra.dev.android.storibankapp.register.presentations.screen.form
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -30,9 +30,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.LoginDestination
 import com.ibra.dev.android.storibankapp.core.presentation.navigations.RegisterDestination
+import com.ibra.dev.android.storibankapp.core.presentation.navigations.SingUpResultDestination
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.CameraModalBottomSheet
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.MyButton
 import com.ibra.dev.android.storibankapp.core.presentation.widgets.RequestCameraPermission
+import com.ibra.dev.android.storibankapp.register.presentations.screen.result.BobsitoState
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import com.ibra.dev.android.storibankapp.register.presentations.viewmodels.RegisterScreenViewModel
 import com.ibra.dev.android.storibankapp.ui.theme.mediumPadding
@@ -49,26 +51,23 @@ fun SingUpScreen(navController: NavController) {
 
     var isLoading by remember { mutableStateOf(false) }
 
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showCameraBottomSheet by remember { mutableStateOf(false) }
 
     var pictureBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val context = LocalContext.current
 
     HandlerScreenState(
+        navController,
         stateScreen,
         context,
-        onLoadingState = { isLoading = it },
-        onSuccessNavigate = {
-            navController.navigate(LoginDestination)
-            navController.popBackStack<RegisterDestination>(inclusive = true)
-        }
+        onLoadingState = { isLoading = it }
     )
 
     if (requestCameraPermission) {
         RequestCameraPermission { granted ->
             if (granted) {
-                showBottomSheet = true
+                showCameraBottomSheet = true
             } else {
                 Toast.makeText(context, "Permiso denegado", Toast.LENGTH_SHORT).show()
             }
@@ -76,14 +75,10 @@ fun SingUpScreen(navController: NavController) {
         }
     }
 
-    if (showBottomSheet) {
-        CameraModalBottomSheet(
-            onBitmapCaptured = { bitmap ->
-                registerViewModel.onPictureChange(bitmap)
-                pictureBitmap = bitmap
-                showBottomSheet = false
-            }
-        )
+    CameraBottomDialog(showCameraBottomSheet) {
+        pictureBitmap = it
+        showCameraBottomSheet = false
+        registerViewModel.onPictureChange(it)
     }
 
     Scaffold(
@@ -134,20 +129,47 @@ fun SingUpScreen(navController: NavController) {
 }
 
 @Composable
+private fun CameraBottomDialog(
+    showBottomSheet: Boolean,
+    onBitmapResult: (Bitmap) -> Unit,
+) {
+    if (showBottomSheet) {
+        CameraModalBottomSheet(
+            onBitmapCaptured = { bitmap ->
+                onBitmapResult(bitmap)
+            }
+        )
+    }
+}
+
+@Composable
 private fun HandlerScreenState(
+    navController: NavController,
     stateScreen: RegisterScreenStates,
     context: Context,
     onLoadingState: (Boolean) -> Unit,
-    onSuccessNavigate: () -> Unit,
 ) {
     LaunchedEffect(key1 = stateScreen) {
-        when (val state = stateScreen) {
+        when (stateScreen) {
             is RegisterScreenStates.Loading -> onLoadingState(true)
-            is RegisterScreenStates.Success -> onSuccessNavigate()
+            is RegisterScreenStates.Success -> {
+                onLoadingState(true)
+                navController.navigate(
+                    SingUpResultDestination(
+                        msg = "Tu cuenta ha sido creada exitosamente",
+                        state = BobsitoState.HAPPY
+                    )
+                )
+            }
 
             is RegisterScreenStates.Error -> {
                 onLoadingState(false)
-                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                navController.navigate(
+                    SingUpResultDestination(
+                        msg = stateScreen.message,
+                        state = BobsitoState.HAPPY
+                    )
+                )
             }
 
             else -> Unit

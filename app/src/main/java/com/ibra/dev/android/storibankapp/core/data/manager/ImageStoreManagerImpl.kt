@@ -39,7 +39,7 @@ class ImageStoreManagerImpl(
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream)
         return byteArrayOutputStream.toByteArray()
     }
 

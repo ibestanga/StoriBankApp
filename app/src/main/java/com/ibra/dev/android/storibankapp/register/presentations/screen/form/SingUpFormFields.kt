@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.register.presentations.screen
+package com.ibra.dev.android.storibankapp.register.presentations.screen.form
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

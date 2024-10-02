@@ -3,4 +3,6 @@
     <string name="generic_error_text_field">Este campo es requerido</string>
     <string name="login_dont_have_account">No tienes una Cuenta?</string>
     <string name="login_sing_up_hint">Registrate</string>
+    <string name="accept_copy">Aceptar</string>
+    <string name="generic_content_descriptions">image description</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.ibra.dev.android.storibankapp.register.presentations.screen
+package com.ibra.dev.android.storibankapp.register.presentations.screen.form
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image

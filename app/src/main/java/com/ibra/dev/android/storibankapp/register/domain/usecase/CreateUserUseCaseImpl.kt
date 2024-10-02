@@ -1,6 +1,6 @@
 package com.ibra.dev.android.storibankapp.register.domain.usecase
 
-import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
+import com.ibra.dev.android.storibankapp.register.domain.models.UserSingUpDto
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import com.ibra.dev.android.storibankapp.register.domain.contracts.CreateUserUseCase
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates

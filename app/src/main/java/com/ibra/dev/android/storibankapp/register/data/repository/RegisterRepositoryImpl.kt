@@ -5,8 +5,8 @@ import com.ibra.dev.android.storibankapp.core.data.contracts.ImageStoreManager
 import com.ibra.dev.android.storibankapp.core.data.contracts.UserRemoteDataSource
 import com.ibra.dev.android.storibankapp.core.data.entities.UserResponse
 import com.ibra.dev.android.storibankapp.core.utils.orAlternative
-import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
-import com.ibra.dev.android.storibankapp.login.domain.models.toUserEntity
+import com.ibra.dev.android.storibankapp.register.domain.models.UserSingUpDto
+import com.ibra.dev.android.storibankapp.register.domain.models.toUserEntity
 import com.ibra.dev.android.storibankapp.register.data.contracts.RegisterRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.coroutineScope

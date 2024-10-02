@@ -4,8 +4,8 @@ import android.graphics.Bitmap
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ibra.dev.android.storibankapp.login.domain.models.UserSingUpDto
-import com.ibra.dev.android.storibankapp.login.domain.models.isValid
+import com.ibra.dev.android.storibankapp.register.domain.models.UserSingUpDto
+import com.ibra.dev.android.storibankapp.register.domain.models.isValid
 import com.ibra.dev.android.storibankapp.register.domain.contracts.CreateUserUseCase
 import com.ibra.dev.android.storibankapp.register.presentations.states.RegisterScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
