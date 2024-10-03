@@ -22,21 +22,30 @@ class UserRemoteDataSourceImpl(
         val responseDeferred: CompletableDeferred<UserResponse> = CompletableDeferred()
         firestore.collection(CLIENTS_COLLECTION).document(email).get()
             .addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    snapshot.toObject(UserEntity::class.java)?.let {
+                try {
+                    if (snapshot.exists()) {
+                        snapshot.toObject(UserEntity::class.java)?.let {
+                            responseDeferred.complete(
+                                UserResponse(
+                                    isSuccess = true,
+                                    message = USER_FOUND,
+                                    data = it
+                                )
+                            )
+                        }
+                    } else {
                         responseDeferred.complete(
                             UserResponse(
-                                isSuccess = true,
-                                message = USER_FOUND,
-                                data = it
+                                isSuccess = false,
+                                message = USER_NOT_FOUND
                             )
                         )
                     }
-                } else {
+                } catch (e: Exception) {
                     responseDeferred.complete(
                         UserResponse(
                             isSuccess = false,
-                            message = USER_NOT_FOUND
+                            message = e.message.orAlternative(UNKNOWN_ERROR_OCCURRED)
                         )
                     )
                 }
