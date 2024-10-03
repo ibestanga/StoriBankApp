@@ -59,7 +59,7 @@ fun SingUpResultScreen(
                     navController.popBackStack<SingUpResultDestination>(inclusive = true)
                 } else {
                     navController.navigate(LoginDestination) {
-                        popUpTo<SingUpResultDestination> {
+                        popUpTo<LoginDestination> {
                             inclusive = true
                         }
                     }
