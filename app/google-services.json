@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "349067771578",
+    "project_id": "storibankapp",
+    "storage_bucket": "storibankapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349067771578:android:a018ce50d23f361fc90c83",
+        "android_client_info": {
+          "package_name": "com.ibra.dev.android.storibankapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdtz7uFdKP32u0fmJfMipO40kGlxZVdCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
