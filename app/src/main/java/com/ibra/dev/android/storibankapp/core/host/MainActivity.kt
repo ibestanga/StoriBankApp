@@ -32,36 +32,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun Greeting(modifier: Modifier = Modifier) {
-    val loginViewModel: LoginViewModel = hiltViewModel()
-    val registerViewModel: RegisterScreenViewModel = hiltViewModel()
-
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = {
-            loginViewModel.tryLogin("ida.saxton.mckinley@example-pet-store.com", "123456")
-        }) {
-            Text(text = "Login")
-        }
-
-        Button(onClick = {
-            registerViewModel.registerUser()
-        }) {
-            Text(text = "Register User")
-        }
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    StoriBankAppTheme {
-        Greeting()
-    }
-}
